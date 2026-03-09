@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" sizes="16x32" href="../assets/img/icon-preview.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Projects - Raymond's Web Portfolio</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../assets/fonts/css/all.min.css" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/projects.css" />
+</head>
+<body>
+
+  <!-- Matrix Background Canvas -->
+  <canvas id="matrix-canvas"></canvas>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="../index.html">
+        <img class="nav-icon" src="../assets/img/icon-home.png" alt="Home" />
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarNav" style="filter: invert(1);">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav gap-4">
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">
+              <img class="nav-icon" src="../assets/img/icon-about.png" alt="About" /> About
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="skills.html">
+              <img class="nav-icon" src="../assets/img/icon-skills.png" alt="Skills" /> Skills
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="projects.html">
+              <img class="nav-icon" src="../assets/img/icon-projects.png" alt="Projects" /> Projects
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">
+              <img class="nav-icon" src="../assets/img/icon-contact.png" alt="Contact" /> Contact
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Projects Section -->
+  <section class="projects-section">
+    <div class="projects-inner">
+
+      <!-- Section Header -->
+      <div class="projects-header">
+        <h1 class="page-section-title projects-title">
+          <img class="page-section-title-icon" src="../assets/img/icon-projects.png" alt="" aria-hidden="true" />
+          Projects
+        </h1>
+        <p class="projects-subtitle">Check out some of my interesting projects:</p>
+      </div>
+
+      <!-- Carousel -->
+      <div class="projects-carousel">
+
+        <!-- Left: Description + Tags -->
+        <div class="project-info-panel">
+          <div class="project-description-box">
+            <p class="project-description" id="proj-desc"></p>
+          </div>
+          <div class="project-tags" id="proj-tags"></div>
+        </div>
+
+        <!-- Laptop + flanking arrows -->
+        <div class="laptop-carousel-group">
+
+          <!-- Prev Arrow -->
+          <button class="carousel-arrow carousel-arrow--prev" id="btn-prev" aria-label="Previous project">&#8592;</button>
+
+          <!-- Laptop Mockup -->
+          <div class="laptop-wrapper">
+            <div class="laptop">
+              <div class="laptop-screen-bezel">
+                <div class="laptop-screen">
+                  <a class="laptop-link" id="proj-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="Open project repository">
+                    <img class="laptop-screenshot" id="proj-img" src="" alt="Project screenshot" />
+                    <span class="laptop-link-overlay"><span class="laptop-link-label">&#128279; View Repository</span></span>
+                  </a>
+                </div>
+              </div>
+              <div class="laptop-hinge-bar"></div>
+              <div class="laptop-base">
+                <div class="laptop-keyboard">
+                  <div class="keyboard-row"></div>
+                  <div class="keyboard-row"></div>
+                  <div class="keyboard-row"></div>
+                  <div class="keyboard-row"></div>
+                </div>
+                <div class="laptop-trackpad-area">
+                  <div class="laptop-trackpad"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Next Arrow -->
+          <button class="carousel-arrow carousel-arrow--next" id="btn-next" aria-label="Next project">&#8594;</button>
+
+        </div>
+
+      </div>
+
+      <!-- Dot indicators -->
+      <div class="carousel-dots" id="carousel-dots"></div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>&copy; 2026 <span class="footer-name">Raymond Portilla</span>. All rights reserved.</p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Matrix Rain -->
+  <script src="../assets/js/matrix.js"></script>
+
+  <script>
+    const projects = [
+      {
+        description: "An interactive web application for optimizing campus tours at Universidad San Francisco de Quito (USFQ). The tool uses optimization algorithms to find the best route that visits the maximum number of locations within a given time limit.",
+        tags: ["HTML", "CSS", "Javascript"],
+        image: "../assets/img/project1.png",
+        repo: "https://github.com/rmandors/Campus-Tour-Optimization"
+      },
+      {
+        description: "A top-down space shooter game featuring a vibrant retro neon arcade aesthetic, power-ups and progressive difficulty. The game challenges players to survive waves of enemies while improving their score and competing for the top position on the leaderboard.",
+        tags: ["Processing", "Javascript"],
+        image: "../assets/img/project2.png",
+        repo: "https://github.com/rmandors/Neon-Runner"
+      },
+      {
+        description: "A Docker Compose-orchestrated urban transport data platform where a FastAPI backend and Streamlit frontend process and manage city routes. It supports bulk Parquet uploads through an ETL pipeline and provides a validated CRUD interface for route data management.",
+        tags: ["Python", "FastAPI", "Docker"],
+        image: "../assets/img/project3.png",
+        repo: "https://github.com/rmandors/Demand-Prediction-Service"
+      },
+      {
+        description: "A desktop application built with Java and JavaFX to manage employee payroll. The application loads employee data, performs salary calculations, supports sorting and filtering, and allows exporting the processed information.",
+        tags: ["Java", "JavaFX"],
+        image: "../assets/img/project4.png",
+        repo: "https://github.com/rmandors/Payment-Role-App"
+      },
+      {
+        description: "A fintech system that allows the creation of clients and accounts, as well as transactions such as deposits, withdrawals, and transfers. The project follows a hexagonal architecture with API, frontend, and database services running in containers.",
+        tags: ["Python", "FastAPI", "Docker", "MySQL", "PostgreSQL"],
+        image: "../assets/img/project5.png",
+        repo: "https://github.com/rmandors/Fintech-Mini-Bank"
+      }
+    ];
+
+    let current = 0;
+    const descEl  = document.getElementById('proj-desc');
+    const tagsEl  = document.getElementById('proj-tags');
+    const imgEl   = document.getElementById('proj-img');
+    const linkEl  = document.getElementById('proj-link');
+    const dotsEl  = document.getElementById('carousel-dots');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+
+    // Build dots
+    projects.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.classList.add('carousel-dot');
+      dot.setAttribute('aria-label', 'Go to project ' + (i + 1));
+      dot.addEventListener('click', () => goTo(i));
+      dotsEl.appendChild(dot);
+    });
+
+    function goTo(index) {
+      current = (index + projects.length) % projects.length;
+      render();
+    }
+
+    function render() {
+      const p = projects[current];
+      descEl.style.opacity = '0';
+      imgEl.style.opacity  = '0';
+      tagsEl.style.opacity = '0';
+
+      setTimeout(() => {
+        descEl.textContent = p.description;
+        imgEl.src = p.image;
+        imgEl.alt = 'Project ' + (current + 1) + ' screenshot';
+        linkEl.href = p.repo;
+
+        tagsEl.innerHTML = '';
+        p.tags.forEach(tag => {
+          const span = document.createElement('span');
+          span.classList.add('project-tag');
+          span.textContent = tag;
+          tagsEl.appendChild(span);
+        });
+
+        document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+          dot.classList.toggle('carousel-dot--active', i === current);
+        });
+
+        descEl.style.opacity = '1';
+        imgEl.style.opacity  = '1';
+        tagsEl.style.opacity = '1';
+      }, 200);
+    }
+
+    btnPrev.addEventListener('click', () => goTo(current - 1));
+    btnNext.addEventListener('click', () => goTo(current + 1));
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft')  goTo(current - 1);
+      if (e.key === 'ArrowRight') goTo(current + 1);
+    });
+
+    render();
+  </script>
+
+</body>
+</html>

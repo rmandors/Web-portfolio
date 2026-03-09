@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" sizes="16x32" href="../assets/img/icon-preview.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Skills - Raymond's Web Portfolio</title>
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../assets/fonts/css/all.min.css" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/skills.css" />
+</head>
+<body>
+
+  <!-- Matrix Background Canvas -->
+  <canvas id="matrix-canvas"></canvas>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+
+      <a class="navbar-brand" href="../index.html">
+        <img class="nav-icon" src="../assets/img/icon-home.png" alt="Home" />
+      </a>
+
+      <button
+        class="navbar-toggler border-0"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        style="filter: invert(1);"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav gap-4">
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">
+              <img class="nav-icon" src="../assets/img/icon-about.png" alt="About" /> About
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="skills.html">
+              <img class="nav-icon" src="../assets/img/icon-skills.png" alt="Skills" /> Skills
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="projects.html">
+              <img class="nav-icon" src="../assets/img/icon-projects.png" alt="Projects" /> Projects
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">
+              <img class="nav-icon" src="../assets/img/icon-contact.png" alt="Contact" /> Contact
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- Skills Section -->
+  <section class="skills-section">
+    <div class="container-fluid">
+
+      <!-- Section Title -->
+      <div class="skills-header">
+        <h1 class="page-section-title skills-title">
+          <img class="page-section-title-icon" src="../assets/img/icon-skills.png" alt="" aria-hidden="true" />
+          Skills
+        </h1>
+
+        <!-- Tab Toggle -->
+        <div class="skills-toggle" role="tablist">
+          <button
+            class="skills-tab skills-tab--active"
+            id="tab-hard"
+            role="tab"
+            aria-selected="true"
+            aria-controls="panel-hard"
+            data-tab="hard"
+          >
+            Hard Skills
+          </button>
+          <button
+            class="skills-tab"
+            id="tab-soft"
+            role="tab"
+            aria-selected="false"
+            aria-controls="panel-soft"
+            data-tab="soft"
+          >
+            Soft Skills
+          </button>
+        </div>
+      </div>
+
+      <!-- ── HARD SKILLS PANEL ── -->
+      <div
+        class="skills-panel"
+        id="panel-hard"
+        role="tabpanel"
+        aria-labelledby="tab-hard"
+      >
+        <div class="row align-items-center gy-5">
+
+          <!-- Left: Neon coding illustration -->
+          <div class="col-lg-5 skills-illustration-col">
+            <div class="skills-illustration">
+              <img
+                src="../assets/img/hardSkills.png"
+                alt="Hard Skills"
+                class="skills-neon-img"
+              />
+            </div>
+          </div>
+
+          <!-- Right: Tech icons grid (3x4) -->
+          <div class="col-lg-7 skills-icons-col">
+            <div class="skills-grid">
+
+              <div class="skill-card">
+                <div class="skill-icon-wrap">
+                  <img src="../assets/img/icon-html.png.webp" alt="HTML5" class="skill-icon" />
+                </div>
+                <span class="skill-label">HTML</span>
+              </div>
+
+              <div class="skill-card">
+                <div class="skill-icon-wrap">
+                  <img src="../assets/img/icon-css.png.webp" alt="CSS3" class="skill-icon" />
+                </div>
+                <span class="skill-label">CSS</span>
+              </div>
+
+              <div class="skill-card">
+                <div class="skill-icon-wrap">
+                  <img src="../assets/img/icon-javascript.webp" alt="JavaScript" class="skill-icon" />
+                </div>
+                <span class="skill-label">JavaScript</span>
+              </div>
+
+              <div class="skill-card">
+                <div class="skill-icon-wrap">
+                  <img src="../assets/img/icon-processing.png" alt="Processing" class="skill-icon" />
+                </div>
+                <span class="skill-label">Processing</span>
+              </div>
+
+              <div class="skill-card">
+                <div class="skill-icon-wrap">
+                  <img src="../assets/img/icon-python.svg.png" alt="Python" class="skill-icon" />
+                </div>
+                <span class="skill-label">Python</span>
+              </div>
+
+              <div class="skill-card">
+                <div class="skill-icon-wrap">
+                  <img src="../assets/img/icon-java.png" alt="Java" class="skill-icon" />
+                </div>
+                <span class="skill-label">Java</span>
+              </div>
+
+              <div class="skill-card">
+                <div class="skill-icon-wrap">
+                  <img src="../assets/img/icon-c++.png" alt="C/C++" class="skill-icon" />
+                </div>
+                <span class="skill-label">C/C++</span>
+              </div>
+
+              <div class="skill-card">
+                <div class="skill-icon-wrap">
+                  <img src="../assets/img/icon-assembly.png" alt="Assembly" class="skill-icon" />
+                </div>
+                <span class="skill-label">Assembly</span>
+              </div>
+
+              <div class="skill-card">
+                <div class="skill-icon-wrap">
+                  <img src="../assets/img/icon-docker.webp" alt="Docker" class="skill-icon" />
+                </div>
+                <span class="skill-label">Docker</span>
+              </div>
+
+              <div class="skill-card">
+                <div class="skill-icon-wrap">
+                  <img src="../assets/img/icon-git.png" alt="Git" class="skill-icon" />
+                </div>
+                <span class="skill-label">Git</span>
+              </div>
+
+              <div class="skill-card">
+                <div class="skill-icon-wrap">
+                  <img src="../assets/img/icon-powerbi.png" alt="Power BI" class="skill-icon" />
+                </div>
+                <span class="skill-label">Power BI</span>
+              </div>
+
+              <div class="skill-card">
+                <div class="skill-icon-wrap">
+                  <img src="../assets/img/icon-aws.webp" alt="AWS" class="skill-icon" />
+                </div>
+                <span class="skill-label">AWS</span>
+              </div>
+
+              <div class="skill-card">
+                <div class="skill-icon-wrap">
+                  <img src="../assets/img/icon-mysql.png" alt="MySQL" class="skill-icon" />
+                </div>
+                <span class="skill-label">MySQL</span>
+              </div>
+
+              <div class="skill-card">
+                <div class="skill-icon-wrap">
+                  <img src="../assets/img/icon-postgresql.png" alt="PostgreSQL" class="skill-icon" />
+                </div>
+                <span class="skill-label">PostgreSQL</span>
+              </div>
+
+              <div class="skill-card">
+                <div class="skill-icon-wrap">
+                  <img src="../assets/img/icon-illustrator.png" alt="Adobe Illustrator" class="skill-icon" />
+                </div>
+                <span class="skill-label">Illustrator</span>
+              </div>
+
+              <div class="skill-card">
+                <div class="skill-icon-wrap">
+                  <img src="../assets/img/icon-photoshop.png" alt="Adobe Photoshop" class="skill-icon" />
+                </div>
+                <span class="skill-label">Photoshop</span>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── SOFT SKILLS PANEL ── -->
+      <div
+        class="skills-panel skills-panel--hidden"
+        id="panel-soft"
+        role="tabpanel"
+        aria-labelledby="tab-soft"
+      >
+        <div class="row align-items-center gy-5">
+
+          <!-- Left: Soft skills pill grid -->
+          <div class="col-lg-7 skills-soft-col">
+            <div class="soft-grid">
+              <div class="soft-pill">Spanish Native</div>
+              <div class="soft-pill">English Upper Intermediate</div>
+              <div class="soft-pill">Mentoring and leadership</div>
+              <div class="soft-pill">Curiosity and determination</div>
+              <div class="soft-pill">Professional communication</div>
+              <div class="soft-pill">Emotional intelligence</div>
+              <div class="soft-pill">Conference and networking fan</div>
+              <div class="soft-pill">Technical writing</div>
+              <div class="soft-pill">Problem solving</div>
+              <div class="soft-pill">Teamwork</div>
+              <div class="soft-pill">Adaptability</div>
+              <div class="soft-pill">Time management</div>
+            </div>
+          </div>
+
+          <div class="col-lg-5 skills-illustration-col">
+            <div class="skills-illustration skills-illustration--right">
+              <img
+                src="../assets/img/softSkills.png"
+                alt="Soft Skills"
+                class="skills-neon-img"
+              />
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>&copy; 2026 <span class="footer-name">Raymond Portilla</span>. All rights reserved.</p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Matrix Rain -->
+  <script src="../assets/js/matrix.js"></script>
+
+  <!-- Skills Tab Switch -->
+  <script>
+    const tabs   = document.querySelectorAll('.skills-tab');
+    const panels = document.querySelectorAll('.skills-panel');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.tab;
+
+        tabs.forEach(t => {
+          const isActive = t.dataset.tab === target;
+          t.classList.toggle('skills-tab--active', isActive);
+          t.setAttribute('aria-selected', isActive);
+        });
+
+        panels.forEach(p => {
+          const isVisible = p.id === `panel-${target}`;
+          p.classList.toggle('skills-panel--hidden', !isVisible);
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
