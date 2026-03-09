@@ -1,0 +1,130 @@
+.contact-section {
+  position: relative;
+  z-index: 5;
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+.contact-section .container-fluid {
+  max-width: 100%;
+  margin: 0;
+  padding: 0 2rem;
+}
+
+.contact-content {
+  max-width: 540px;
+  margin-left: 8rem; 
+}
+
+.contact-title {
+  margin-bottom: 0.75rem;
+}
+
+.contact-subtitle {
+  font-size: 1.2rem;
+  color: #fff;
+  margin-bottom: 2rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.contact-field {
+  width: 100%;
+}
+
+.contact-input {
+  width: 100%;
+  padding: 0.9rem 1.1rem;
+  background: #000;
+  border: 2px solid var(--green);
+  border-radius: 8px;
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1rem;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.contact-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.contact-input:focus {
+  outline: none;
+  border-color: var(--green);
+  box-shadow: 0 0 12px rgba(0, 255, 65, 0.35);
+}
+
+.contact-textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.contact-btn {
+  align-self: flex-start;
+  padding: 0.75rem 2.5rem;
+  background: var(--green);
+  color: #000;
+  border: 2px solid var(--green-dark);
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.contact-btn:hover {
+  background: var(--green-dim);
+  color: #000;
+  box-shadow: 0 0 14px rgba(0, 255, 65, 0.5);
+}
+
+.contact-btn:disabled {
+  opacity: 0.85;
+  cursor: not-allowed;
+}
+
+.contact-form-message {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.contact-form-message--success {
+  color: var(--green);
+  border: 1px solid var(--green);
+  background: rgba(0, 255, 65, 0.08);
+}
+
+.contact-form-message--error {
+  color: #ff6b6b;
+  border: 1px solid #ff6b6b;
+  background: rgba(255, 107, 107, 0.08);
+}
+
+.contact-illustration-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact-illustration {
+  margin-left: -100px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.contact-morpheus-img {
+  width: 160%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0 12px rgba(0, 255, 65, 0.35));
+}

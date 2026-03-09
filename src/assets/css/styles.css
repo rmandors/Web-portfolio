@@ -1,6 +1,7 @@
 /* GLOBAL STYLES */
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&display=swap');
 
-   :root {
+  :root {
     --green:      #00ff41;
     --green-dim:  #00c832;
     --green-dark: #003b0f;
@@ -13,6 +14,12 @@
     box-sizing: border-box;
   }
   
+  html {
+    font-size: 110%;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  
   body {
     background: var(--bg);
     color: #fff;
@@ -20,9 +27,29 @@
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
+    min-width: 320px;
   }
   
-  /* Matrix Canvas */
+  /* Section titles (Skills, Contact, etc.): uppercase + icon, theme font */
+  .page-section-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'Orbitron', 'Share Tech Mono', 'Courier New', monospace;
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-weight: 700;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin: 0;
+  }
+  
+  .page-section-title-icon {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+  }
+  
   #matrix-canvas {
     position: fixed;
     top: 0; 
@@ -34,24 +61,41 @@
     pointer-events: none;
   }
   
-  /* NAVBAR */
   .navbar {
     position: relative;
     z-index: 10;
-    padding: 1rem 2rem;
+    padding: 0.75rem 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+  }
+  
+  .navbar .container-fluid {
+    max-width: 100%;
+    margin: 0;
+    padding: 0.25rem 1.5rem 0.25rem 2.25rem;
     background: transparent;
+    border-radius: 0;
+  }
+  
+  .navbar-brand {
+    margin-right: 2rem;
   }
   
   .navbar-brand img {
-    height: 50px;
+    margin-left: 2rem;
+    height: 65px;
     width: auto;
     filter: drop-shadow(0 0 8px var(--green)); 
+  }
+  
+  .navbar-nav {
+    gap: 5rem !important;
   }
   
   .nav-link {
     color: #fff !important;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 1.15rem;
     letter-spacing: 1px;
     text-transform: uppercase;
     transition: color 0.2s, text-shadow 0.2s;
@@ -65,11 +109,39 @@
     text-shadow: 0 0 10px var(--green);
   }
   
+  /* Active section in nav (current page) – only color, no underline */
+  .nav-link.active {
+    color: var(--green) !important;
+    text-shadow: 0 0 10px var(--green);
+  }
+  
   .nav-icon {
-    width: 22px;
-    height: 22px;
+    width: 30px;
+    height: 30px;
     object-fit: contain;
-    filter: drop-shadow(0 0 5px var(--green));
+  }
+  
+  /* FOOTER (common to all pages) */
+  .site-footer {
+    position: relative;
+    z-index: 5;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    border-top: 1px solid rgba(0, 255, 65, 0.2);
+    background: rgba(0, 0, 0, 0.3);
+  }
+  
+  .site-footer p {
+    margin: 0;
+    letter-spacing: 0.5px;
+  }
+  
+  .site-footer .footer-name {
+    color: var(--green);
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(0, 255, 65, 0.3);
   }
   
   /* ANIMATIONS */
