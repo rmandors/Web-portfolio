@@ -15,13 +15,367 @@
   <!-- Custom CSS -->
   <link rel="stylesheet" href="../assets/css/styles.css" />
   <link rel="stylesheet" href="../assets/css/projects.css" />
+
+  <style>
+    /* ── PROJECT NAME above the laptop ─────────────────── */
+    .project-name-label {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1rem, 2.2vw, 1.35rem);
+      font-weight: 700;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-align: center;
+      text-shadow: 0 0 14px rgba(0,255,65,.55);
+      margin-bottom: 0.55rem;
+      transition: opacity .2s ease;
+    }
+
+    /* ── CLICK-HINT overlay on laptop ───────────────────── */
+    .laptop-link {
+      display: block;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .laptop-link-label {
+      font-family: 'Orbitron', monospace;
+      color: var(--green);
+      font-size: .88rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(0,255,65,.7);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       DETAIL PANEL (slides in from right)
+    ══════════════════════════════════════════════════════ */
+    .detail-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      pointer-events: none;
+    }
+    .detail-overlay.open { pointer-events: auto; }
+
+    .detail-scrim {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.65);
+      opacity: 0;
+      transition: opacity .35s ease;
+      cursor: pointer;
+    }
+    .detail-overlay.open .detail-scrim { opacity: 1; }
+
+    .detail-panel {
+      position: absolute;
+      top: 0; right: 0;
+      height: 100%;
+      width: min(620px, 100vw);
+      background: #070e07;
+      border-left: 2px solid var(--green);
+      box-shadow: -6px 0 40px rgba(0,255,65,.18);
+      transform: translateX(100%);
+      transition: transform .38s cubic-bezier(.22,.61,.36,1);
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      scrollbar-width: thin;
+      scrollbar-color: var(--green) transparent;
+    }
+    .detail-overlay.open .detail-panel { transform: translateX(0); }
+
+    .detail-panel::before {
+      content: '';
+      position: fixed;
+      top: 0; right: 0;
+      width: min(620px, 100vw);
+      height: 100%;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,255,65,.012) 3px,
+        rgba(0,255,65,.012) 4px
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .detail-close {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      align-self: flex-end;
+      margin: 1rem 1.2rem 0 0;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 2px solid rgba(0,255,65,.4);
+      background: rgba(0,0,0,.7);
+      color: var(--green);
+      font-size: 1.2rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: border-color .2s, box-shadow .2s, background .2s;
+      flex-shrink: 0;
+    }
+    .detail-close:hover {
+      border-color: var(--green);
+      box-shadow: 0 0 14px rgba(0,255,65,.5);
+      background: rgba(0,255,65,.1);
+    }
+
+    .detail-body {
+      position: relative;
+      z-index: 1;
+      padding: 0 2rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      flex: 1;
+    }
+
+    .panel-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.1rem, 3vw, 1.55rem);
+      font-weight: 700;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 0 0 18px rgba(0,255,65,.5);
+      margin-bottom: 1.4rem;
+      line-height: 1.3;
+    }
+
+    .panel-thumb {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid rgba(0,255,65,.3);
+      box-shadow: 0 0 20px rgba(0,255,65,.1);
+      margin-bottom: 1.6rem;
+      display: block;
+    }
+
+    /* ── Stats row ── */
+    .panel-stats {
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .panel-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .2rem;
+      flex: 1;
+      min-width: 90px;
+      border: 1.5px solid rgba(0,255,65,.25);
+      border-radius: 10px;
+      background: rgba(0,255,65,.03);
+      padding: .75rem .5rem;
+      text-align: center;
+    }
+    .panel-stat-value {
+      font-family: 'Orbitron', monospace;
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--green);
+      text-shadow: 0 0 8px rgba(0,255,65,.4);
+      line-height: 1.2;
+    }
+    .panel-stat-label {
+      font-size: .68rem;
+      color: rgba(255,255,255,.45);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    .panel-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: .15rem .55rem;
+      border-radius: 20px;
+    }
+    .panel-status-badge.completed {
+      color: #00ff41;
+      background: rgba(0,255,65,.1);
+      border: 1px solid rgba(0,255,65,.4);
+    }
+    .panel-status-badge.in-progress {
+      color: #ffd700;
+      background: rgba(255,215,0,.08);
+      border: 1px solid rgba(255,215,0,.35);
+    }
+    .panel-status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 5px currentColor;
+    }
+
+    /* ── Generic section ── */
+    .panel-section {
+      border: 1.5px solid rgba(0,255,65,.22);
+      border-radius: 10px;
+      background: rgba(0,255,65,.03);
+      padding: 1.1rem 1.35rem;
+      margin-bottom: 1rem;
+    }
+    .panel-section:last-of-type { margin-bottom: 0; }
+
+    .panel-section-label {
+      font-family: 'Orbitron', monospace;
+      font-size: .68rem;
+      font-weight: 700;
+      color: rgba(0,255,65,.6);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: .6rem;
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+    }
+    .panel-section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, rgba(0,255,65,.3), transparent);
+    }
+
+    .panel-overview {
+      color: #d4d4d4;
+      font-size: .97rem;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    /* ── Bullet lists ── */
+    .panel-list {
+      list-style: none;
+      padding: 0; margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+    .panel-list li {
+      color: #ccc;
+      font-size: .92rem;
+      line-height: 1.55;
+      padding-left: 1.35rem;
+      position: relative;
+    }
+    .panel-list li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-weight: 700;
+      font-size: 1.1rem;
+      line-height: 1.3;
+    }
+    .panel-list.challenges li::before { content: '⚡'; font-size: .78rem; top: .15rem; }
+    .panel-list.learnings  li::before { content: '◈'; font-size: .75rem; top: .1rem; color: rgba(0,255,65,.8); }
+
+    /* ── Tech Stack chips ── */
+    .panel-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .panel-chip {
+      font-size: .82rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      color: #e0e0e0;
+      background: rgba(0,255,65,.07);
+      border: 1.5px solid rgba(0,255,65,.35);
+      border-radius: 6px;
+      padding: .25rem .7rem;
+      transition: background .2s, box-shadow .2s;
+    }
+    .panel-chip:hover {
+      background: rgba(0,255,65,.14);
+      box-shadow: 0 0 8px rgba(0,255,65,.3);
+    }
+
+    /* ── Action buttons ── */
+    .panel-actions {
+      display: flex;
+      gap: .75rem;
+      margin-top: 1.4rem;
+      flex-wrap: wrap;
+    }
+    .panel-github-btn, .panel-demo-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .6rem;
+      flex: 1;
+      min-width: 160px;
+      padding: .85rem 1.2rem;
+      border-radius: 10px;
+      font-family: 'Orbitron', monospace;
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background .2s, box-shadow .2s, color .2s;
+    }
+    .panel-github-btn {
+      border: 2px solid var(--green);
+      background: rgba(0,255,65,.06);
+      color: var(--green);
+      box-shadow: 0 0 14px rgba(0,255,65,.12);
+    }
+    .panel-github-btn:hover {
+      background: rgba(0,255,65,.14);
+      box-shadow: 0 0 28px rgba(0,255,65,.35);
+      color: #fff;
+    }
+    .panel-demo-btn {
+      border: 2px solid rgba(0,255,65,.35);
+      background: transparent;
+      color: rgba(0,255,65,.7);
+    }
+    .panel-demo-btn:hover {
+      border-color: var(--green);
+      color: var(--green);
+      box-shadow: 0 0 14px rgba(0,255,65,.2);
+    }
+    .panel-demo-btn.hidden { display: none; }
+
+    .panel-github-btn svg, .panel-demo-btn svg {
+      width: 18px; height: 18px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 700px) {
+      .detail-body { padding: 0 1.2rem 2rem; }
+      .panel-title  { font-size: 1.05rem; }
+      .panel-actions { flex-direction: column; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Matrix Background Canvas -->
   <canvas id="matrix-canvas"></canvas>
 
-  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
       <a class="navbar-brand" href="../index.html">
@@ -33,36 +387,17 @@
       </button>
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
         <ul class="navbar-nav gap-4">
-          <li class="nav-item">
-            <a class="nav-link" href="about.html">
-              <img class="nav-icon" src="../assets/img/icon-about.png" alt="About" /> About
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="skills.html">
-              <img class="nav-icon" src="../assets/img/icon-skills.png" alt="Skills" /> Skills
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="projects.html">
-              <img class="nav-icon" src="../assets/img/icon-projects.png" alt="Projects" /> Projects
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="contact.html">
-              <img class="nav-icon" src="../assets/img/icon-contact.png" alt="Contact" /> Contact
-            </a>
-          </li>
+          <li class="nav-item"><a class="nav-link" href="about.html"><img class="nav-icon" src="../assets/img/icon-about.png" alt="About" /> About</a></li>
+          <li class="nav-item"><a class="nav-link" href="skills.html"><img class="nav-icon" src="../assets/img/icon-skills.png" alt="Skills" /> Skills</a></li>
+          <li class="nav-item"><a class="nav-link active" href="projects.html"><img class="nav-icon" src="../assets/img/icon-projects.png" alt="Projects" /> Projects</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html"><img class="nav-icon" src="../assets/img/icon-contact.png" alt="Contact" /> Contact</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <!-- Projects Section -->
   <section class="projects-section">
     <div class="projects-inner">
-
-      <!-- Section Header -->
       <div class="projects-header">
         <h1 class="page-section-title projects-title">
           <img class="page-section-title-icon" src="../assets/img/icon-projects.png" alt="" aria-hidden="true" />
@@ -71,10 +406,7 @@
         <p class="projects-subtitle">Check out some of my interesting projects:</p>
       </div>
 
-      <!-- Carousel -->
       <div class="projects-carousel">
-
-        <!-- Left: Description + Tags -->
         <div class="project-info-panel">
           <div class="project-description-box">
             <p class="project-description" id="proj-desc"></p>
@@ -82,21 +414,19 @@
           <div class="project-tags" id="proj-tags"></div>
         </div>
 
-        <!-- Laptop + flanking arrows -->
         <div class="laptop-carousel-group">
-
-          <!-- Prev Arrow -->
           <button class="carousel-arrow carousel-arrow--prev" id="btn-prev" aria-label="Previous project">&#8592;</button>
-
-          <!-- Laptop Mockup -->
           <div class="laptop-wrapper">
+            <p class="project-name-label" id="proj-name"></p>
             <div class="laptop">
               <div class="laptop-screen-bezel">
                 <div class="laptop-screen">
-                  <a class="laptop-link" id="proj-link" href="#" target="_blank" rel="noopener noreferrer" aria-label="Open project repository">
+                  <button class="laptop-link" id="proj-open-btn" aria-label="View project details">
                     <img class="laptop-screenshot" id="proj-img" src="" alt="Project screenshot" />
-                    <span class="laptop-link-overlay"><span class="laptop-link-label">&#128279; View Repository</span></span>
-                  </a>
+                    <span class="laptop-link-overlay">
+                      <span class="laptop-link-label">&#9776;&nbsp; View Details</span>
+                    </span>
+                  </button>
                 </div>
               </div>
               <div class="laptop-hinge-bar"></div>
@@ -113,74 +443,245 @@
               </div>
             </div>
           </div>
-
-          <!-- Next Arrow -->
           <button class="carousel-arrow carousel-arrow--next" id="btn-next" aria-label="Next project">&#8594;</button>
-
         </div>
-
       </div>
 
-      <!-- Dot indicators -->
       <div class="carousel-dots" id="carousel-dots"></div>
-
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- DETAIL PANEL OVERLAY -->
+  <div class="detail-overlay" id="detail-overlay" role="dialog" aria-modal="true" aria-label="Project details">
+    <div class="detail-scrim" id="detail-scrim"></div>
+    <div class="detail-panel" id="detail-panel">
+      <button class="detail-close" id="detail-close" aria-label="Close panel">&#10005;</button>
+      <div class="detail-body">
+
+        <h2 class="panel-title" id="panel-title"></h2>
+        <img class="panel-thumb" id="panel-thumb" src="" alt="" />
+
+        <!-- Project Stats -->
+        <div class="panel-stats" id="panel-stats"></div>
+
+        <!-- Overview -->
+        <div class="panel-section">
+          <div class="panel-section-label">Overview</div>
+          <p class="panel-overview" id="panel-overview"></p>
+        </div>
+
+        <!-- Key Features -->
+        <div class="panel-section">
+          <div class="panel-section-label">Key Features</div>
+          <ul class="panel-list" id="panel-features"></ul>
+        </div>
+
+        <!-- Challenges & Solutions -->
+        <div class="panel-section">
+          <div class="panel-section-label">Challenges &amp; Solutions</div>
+          <ul class="panel-list challenges" id="panel-challenges"></ul>
+        </div>
+
+        <!-- What I Learned -->
+        <div class="panel-section">
+          <div class="panel-section-label">What I Learned</div>
+          <ul class="panel-list learnings" id="panel-learnings"></ul>
+        </div>
+
+        <!-- Tech Stack -->
+        <div class="panel-section">
+          <div class="panel-section-label">Tech Stack</div>
+          <div class="panel-stack" id="panel-stack"></div>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="panel-actions">
+          <a class="panel-github-btn" id="panel-github" href="#" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24"><path d="M12 .5C5.373.5 0 5.873 0 12.5c0 5.302 3.438 9.8 8.207 11.387.6.113.793-.261.793-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.775.419-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.3 1.23A11.51 11.51 0 0 1 12 6.803c1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.652.242 2.873.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.61-2.807 5.625-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.898-.015 3.293 0 .319.192.694.8.576C20.565 22.296 24 17.8 24 12.5 24 5.873 18.627.5 12 .5z"/></svg>
+            View Repository
+          </a>
+          <a class="panel-demo-btn hidden" id="panel-demo" href="#" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24"><path d="M14 3v2H4v14h16v-10h2v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h11zm7-3v8l-3.5-3.5-6.5 6.5-1.414-1.414L15.586 3.5 12 0H21z"/></svg>
+            Live Demo
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <footer class="site-footer">
     <p>&copy; 2026 <span class="footer-name">Raymond Portilla</span>. All rights reserved.</p>
   </footer>
 
-  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Matrix Rain -->
   <script src="../assets/js/matrix.js"></script>
 
   <script>
     const projects = [
       {
-        description: "An interactive web application for optimizing campus tours at Universidad San Francisco de Quito (USFQ). The tool uses optimization algorithms to find the best route that visits the maximum number of locations within a given time limit.",
+        name: "Campus Tour Optimizer",
+        description: "An interactive web app for optimizing campus tours at USFQ. Uses optimization algorithms to find the best route that visits the maximum number of locations within a given time limit.",
+        overview: "Built for Universidad San Francisco de Quito, this tool helps students and visitors plan the most efficient campus tour possible. Given a set of locations and a time budget, it applies graph-based optimization to compute the ideal visiting order — minimizing travel time while maximizing coverage. The project was driven by a real need: new students and prospective families often struggled to navigate a sprawling campus in limited orientation windows.",
+        features: [
+          "Interactive map interface for selecting campus locations",
+          "Time-constrained route optimization using graph algorithms",
+          "Dynamic recalculation when new stops are added or removed",
+          "Visual step-by-step tour walkthrough with estimated durations",
+          "Responsive design for both desktop and mobile use"
+        ],
+        challenges: [
+          "Implementing an efficient heuristic for the time-constrained TSP variant without server-side compute — adapted a greedy nearest-neighbor approach with pruning directly in JavaScript.",
+          "Making the map intuitive for non-technical users while exposing enough control for custom tour configurations.",
+          "Accurately estimating walking durations between campus nodes using manually surveyed average speeds."
+        ],
+        learnings: [
+          "Graph traversal and greedy heuristics for NP-hard optimization problems running entirely in the browser.",
+          "How to translate a real-world logistical problem into a clean algorithmic model.",
+          "The importance of user-testing early — initial designs were too complex and simplified based on direct feedback."
+        ],
+        status: "completed",
+        duration: "3 weeks",
+        type: "Academic",
         tags: ["HTML", "CSS", "Javascript"],
         image: "../assets/img/project1.png",
-        repo: "https://github.com/rmandors/Campus-Tour-Optimization"
+        repo: "https://github.com/rmandors/Campus-Tour-Optimization",
+        demo: null
       },
       {
-        description: "A top-down space shooter game featuring a vibrant retro neon arcade aesthetic, power-ups and progressive difficulty. The game challenges players to survive waves of enemies while improving their score and competing for the top position on the leaderboard.",
+        name: "Neon Runner",
+        description: "A top-down space shooter featuring vibrant retro neon arcade aesthetics, power-ups, and progressive difficulty. Survive waves of enemies and compete for the top spot on the leaderboard.",
+        overview: "Neon Runner is a retro-inspired arcade space shooter where players pilot a neon ship through increasingly intense enemy waves. The game blends classic shoot-'em-up mechanics with modern visual effects — glowing sprites, particle explosions, and a pulsing soundtrack. Built as a passion project to explore game loop design and real-time rendering, it features a local leaderboard that keeps players coming back to beat their own scores.",
+        features: [
+          "Progressive enemy waves with increasing speed and complexity",
+          "Power-up system: shields, rapid fire, and score multipliers",
+          "Local leaderboard with persistent high-score tracking",
+          "Pixel-perfect neon sprite animations and particle effects",
+          "Smooth rendering via Processing/p5.js engine",
+          "Keyboard input support with intuitive controls"
+        ],
+        challenges: [
+          "Designing a difficulty curve that felt fair rather than punishing — required extensive playtesting to calibrate enemy spawn rates and speed scaling per wave.",
+          "Achieving smooth 60fps particle effects during heavy combat — optimized by pooling particle objects instead of creating and destroying them each frame.",
+          "Implementing persistent leaderboard data in a stateless browser environment using localStorage serialization."
+        ],
+        learnings: [
+          "Core game loop architecture: fixed-timestep updates vs. render-frame decoupling.",
+          "Object pooling as a performance pattern for particle systems and frequently spawned entities.",
+          "How small UX details — screen shake, sound cues, brief invincibility frames — dramatically improve overall game feel."
+        ],
+        status: "completed",
+        duration: "4 weeks",
+        type: "Personal",
         tags: ["Processing", "Javascript"],
         image: "../assets/img/project2.png",
-        repo: "https://github.com/rmandors/Neon-Runner"
+        repo: "https://github.com/rmandors/Neon-Runner",
+        demo: null
       },
       {
-        description: "A Docker Compose-orchestrated urban transport data platform where a FastAPI backend and Streamlit frontend process and manage city routes. It supports bulk Parquet uploads through an ETL pipeline and provides a validated CRUD interface for route data management.",
+        name: "Demand Prediction Service",
+        description: "A Docker Compose-orchestrated urban transport data platform. A FastAPI backend and Streamlit frontend process city routes, support bulk Parquet ETL uploads, and provide a validated CRUD interface.",
+        overview: "This platform is designed for urban mobility teams that need to manage and analyze city transport route data at scale. The entire stack runs in containers — a FastAPI backend handles data ingestion and business logic, while a Streamlit dashboard gives analysts an intuitive interface for exploration and CRUD operations. Bulk uploads via Parquet make large dataset ingestion fast and reliable. Designed with horizontal scalability in mind, individual services can be replicated independently as data volumes grow.",
+        features: [
+          "Dockerized microservice architecture with Docker Compose",
+          "FastAPI backend with typed Pydantic schemas and full validation",
+          "ETL pipeline supporting bulk Parquet file ingestion",
+          "Streamlit dashboard for interactive route data exploration",
+          "Full CRUD interface with real-time data validation feedback",
+          "Scalable design suitable for large city-scale transport datasets"
+        ],
+        challenges: [
+          "Handling large Parquet ingestion efficiently without blocking the API event loop — resolved by offloading ETL jobs to a background thread pool with status polling.",
+          "Keeping FastAPI and Streamlit containers in sync during development without manual rebuilds — solved with Docker volume mounts and a unified Compose watch configuration.",
+          "Designing a validation layer flexible enough to handle heterogeneous route data from multiple city sources with differing schemas."
+        ],
+        learnings: [
+          "Docker Compose networking, service dependencies, and health-check patterns for multi-container applications.",
+          "Async FastAPI patterns and when to delegate blocking I/O to thread executors to avoid starving the event loop.",
+          "Pydantic v2 schema design for strict but ergonomic data validation at API boundaries."
+        ],
+        status: "completed",
+        duration: "5 weeks",
+        type: "Academic",
         tags: ["Python", "FastAPI", "Docker"],
         image: "../assets/img/project3.png",
-        repo: "https://github.com/rmandors/Demand-Prediction-Service"
+        repo: "https://github.com/rmandors/Demand-Prediction-Service",
+        demo: null
       },
       {
-        description: "A desktop application built with Java and JavaFX to manage employee payroll. The application loads employee data, performs salary calculations, supports sorting and filtering, and allows exporting the processed information.",
+        name: "Payment Role App",
+        description: "A desktop application built with Java and JavaFX to manage employee payroll. Loads employee data, performs salary calculations, supports sorting and filtering, and allows exporting results.",
+        overview: "A fully-featured desktop payroll manager built with Java and JavaFX. HR teams can load employee records, configure salary rules, and let the app handle all deduction and bonus calculations automatically. The polished UI includes sortable data tables, multi-field filtering, and one-click export — making end-of-cycle payroll processing significantly faster. Built with a clean MVC separation to keep presentation logic out of the business layer, making future rule changes easy to introduce without touching the UI.",
+        features: [
+          "JavaFX GUI with sortable and filterable employee data tables",
+          "Automated gross-to-net salary calculation with configurable rules",
+          "Support for bonuses, deductions, taxes, and overtime logic",
+          "Export payroll reports to CSV and printable formats",
+          "Role-based views distinguishing admin and read-only access",
+          "Persistent data loading from structured employee files"
+        ],
+        challenges: [
+          "Implementing complex net-pay calculations that chain multiple rule steps (taxes → deductions → bonuses) in a configurable, order-sensitive pipeline.",
+          "Building responsive JavaFX table filtering without freezing the UI thread on large datasets — resolved by binding filter logic to observable lists with background sorting.",
+          "Designing role-based access enforced at the data layer rather than just hidden in the UI, to prevent privilege escalation."
+        ],
+        learnings: [
+          "JavaFX data binding, ObservableList, and property listeners for reactive UI updates without manual re-renders.",
+          "MVC architecture in a desktop application context and why it matters for long-term testability.",
+          "How real payroll calculation pipelines work in practice — ordered rule application with configurable parameters."
+        ],
+        status: "completed",
+        duration: "2 weeks",
+        type: "Academic",
         tags: ["Java", "JavaFX"],
         image: "../assets/img/project4.png",
-        repo: "https://github.com/rmandors/Payment-Role-App"
+        repo: "https://github.com/rmandors/Payment-Role-App",
+        demo: null
       },
       {
-        description: "A fintech system that allows the creation of clients and accounts, as well as transactions such as deposits, withdrawals, and transfers. The project follows a hexagonal architecture with API, frontend, and database services running in containers.",
+        name: "Fintech Mini Bank",
+        description: "A fintech system for creating clients, accounts, and transactions (deposits, withdrawals, transfers). Follows hexagonal architecture with API, frontend, and database services running in containers.",
+        overview: "A production-inspired mini banking platform built to demonstrate clean architecture principles in a fintech context. The hexagonal (ports & adapters) architecture keeps business logic completely decoupled from infrastructure, making every layer independently testable. The system supports the full account lifecycle — from client onboarding to multi-currency transactions — all containerised with separate MySQL and PostgreSQL stores serving different read/write workloads.",
+        features: [
+          "Hexagonal architecture with strict domain/application/infrastructure separation",
+          "Client and account management with full lifecycle support",
+          "Transactional operations: deposits, withdrawals, and inter-account transfers",
+          "Dual-database setup: MySQL for transactional data, PostgreSQL for reporting",
+          "RESTful FastAPI backend with auto-generated OpenAPI documentation",
+          "Docker Compose orchestration for all services",
+          "Frontend interface for managing clients and monitoring account activity"
+        ],
+        challenges: [
+          "Enforcing hexagonal boundaries in Python without a framework that mandates it — solved through strict module packaging rules and import linting to prevent domain code from importing infrastructure.",
+          "Coordinating atomic multi-step transfers across two database engines without a distributed transaction manager — handled with a saga-style compensating transaction pattern.",
+          "Keeping OpenAPI documentation accurate as domain models evolved, without manually maintaining a separate spec file."
+        ],
+        learnings: [
+          "Hexagonal (Ports & Adapters) architecture and why it makes domain logic portable and independently testable.",
+          "Saga pattern for distributed consistency across services that each own their own data store.",
+          "The practical trade-offs of dual databases — operational complexity vs. query performance gains for OLTP vs. analytical workloads."
+        ],
+        status: "completed",
+        duration: "5 weeks",
+        type: "Personal",
         tags: ["Python", "FastAPI", "Docker", "MySQL", "PostgreSQL"],
         image: "../assets/img/project5.png",
-        repo: "https://github.com/rmandors/Fintech-Mini-Bank"
+        repo: "https://github.com/rmandors/Fintech-Mini-Bank",
+        demo: null
       }
     ];
 
+    /* ── CAROUSEL ── */
     let current = 0;
+    const nameEl  = document.getElementById('proj-name');
     const descEl  = document.getElementById('proj-desc');
     const tagsEl  = document.getElementById('proj-tags');
     const imgEl   = document.getElementById('proj-img');
-    const linkEl  = document.getElementById('proj-link');
+    const openBtn = document.getElementById('proj-open-btn');
     const dotsEl  = document.getElementById('carousel-dots');
     const btnPrev = document.getElementById('btn-prev');
     const btnNext = document.getElementById('btn-next');
 
-    // Build dots
     projects.forEach((_, i) => {
       const dot = document.createElement('button');
       dot.classList.add('carousel-dot');
@@ -196,16 +697,12 @@
 
     function render() {
       const p = projects[current];
-      descEl.style.opacity = '0';
-      imgEl.style.opacity  = '0';
-      tagsEl.style.opacity = '0';
-
+      [nameEl, descEl, imgEl, tagsEl].forEach(el => el.style.opacity = '0');
       setTimeout(() => {
+        nameEl.textContent = p.name;
         descEl.textContent = p.description;
         imgEl.src = p.image;
-        imgEl.alt = 'Project ' + (current + 1) + ' screenshot';
-        linkEl.href = p.repo;
-
+        imgEl.alt = p.name + ' screenshot';
         tagsEl.innerHTML = '';
         p.tags.forEach(tag => {
           const span = document.createElement('span');
@@ -213,26 +710,118 @@
           span.textContent = tag;
           tagsEl.appendChild(span);
         });
-
         document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
           dot.classList.toggle('carousel-dot--active', i === current);
         });
-
-        descEl.style.opacity = '1';
-        imgEl.style.opacity  = '1';
-        tagsEl.style.opacity = '1';
+        [nameEl, descEl, imgEl, tagsEl].forEach(el => el.style.opacity = '1');
       }, 200);
     }
 
     btnPrev.addEventListener('click', () => goTo(current - 1));
     btnNext.addEventListener('click', () => goTo(current + 1));
-
     document.addEventListener('keydown', e => {
+      if (isPanelOpen()) return;
       if (e.key === 'ArrowLeft')  goTo(current - 1);
       if (e.key === 'ArrowRight') goTo(current + 1);
     });
-
     render();
+
+    /* ── DETAIL PANEL ── */
+    const overlay    = document.getElementById('detail-overlay');
+    const scrim      = document.getElementById('detail-scrim');
+    const closeBtn   = document.getElementById('detail-close');
+    const panelTitle = document.getElementById('panel-title');
+    const panelThumb = document.getElementById('panel-thumb');
+    const panelOver  = document.getElementById('panel-overview');
+    const panelFeat  = document.getElementById('panel-features');
+    const panelChal  = document.getElementById('panel-challenges');
+    const panelLearn = document.getElementById('panel-learnings');
+    const panelStack = document.getElementById('panel-stack');
+    const panelStats = document.getElementById('panel-stats');
+    const panelGH    = document.getElementById('panel-github');
+    const panelDemo  = document.getElementById('panel-demo');
+    const panelEl    = document.getElementById('detail-panel');
+
+    function isPanelOpen() { return overlay.classList.contains('open'); }
+
+    function makeStat(value, label) {
+      const el = document.createElement('div');
+      el.classList.add('panel-stat');
+      el.innerHTML = `<span class="panel-stat-value">${value}</span><span class="panel-stat-label">${label}</span>`;
+      return el;
+    }
+
+    function makeStatusStat(status) {
+      const el = document.createElement('div');
+      el.classList.add('panel-stat');
+      const label = status === 'completed' ? 'Completed' : 'In Progress';
+      el.innerHTML = `
+        <span class="panel-status-badge ${status}">
+          <span class="panel-status-dot"></span>${label}
+        </span>
+        <span class="panel-stat-label">Status</span>`;
+      return el;
+    }
+
+    function fillList(ul, items) {
+      ul.innerHTML = '';
+      items.forEach(text => {
+        const li = document.createElement('li');
+        li.textContent = text;
+        ul.appendChild(li);
+      });
+    }
+
+    function openPanel() {
+      const p = projects[current];
+      panelTitle.textContent = p.name;
+      panelThumb.src  = p.image;
+      panelThumb.alt  = p.name + ' screenshot';
+      panelOver.textContent = p.overview;
+
+      panelStats.innerHTML = '';
+      panelStats.appendChild(makeStatusStat(p.status));
+      panelStats.appendChild(makeStat(p.duration, 'Duration'));
+      panelStats.appendChild(makeStat(p.type, 'Type'));
+
+      fillList(panelFeat,  p.features);
+      fillList(panelChal,  p.challenges);
+      fillList(panelLearn, p.learnings);
+
+      panelStack.innerHTML = '';
+      p.tags.forEach(tag => {
+        const chip = document.createElement('span');
+        chip.classList.add('panel-chip');
+        chip.textContent = tag;
+        panelStack.appendChild(chip);
+      });
+
+      panelGH.href = p.repo;
+      if (p.demo) {
+        panelDemo.href = p.demo;
+        panelDemo.classList.remove('hidden');
+      } else {
+        panelDemo.classList.add('hidden');
+      }
+
+      panelEl.scrollTop = 0;
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    }
+
+    function closePanel() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener('click', openPanel);
+    scrim.addEventListener('click', closePanel);
+    closeBtn.addEventListener('click', closePanel);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && isPanelOpen()) closePanel();
+    });
   </script>
 
 </body>
